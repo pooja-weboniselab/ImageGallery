@@ -17,6 +17,7 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="bootstrap/css/custome.css" rel="stylesheet" media="screen">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
     <script src="uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="uploadify/uploadify.css">
@@ -44,15 +45,15 @@ session_start();
 
     <div class = "row" >
         <div class="span10">
-            <div class="pull-right">
-                <div class="container" id="imagegallery">
 
-                </div></div>
+                <ul id="imagegallery">
+
+                </ul>
         </div>
         <div class="span2" >
             <form>
                 <div id="queue"></div>
-                <input id="file_upload" name="file_upload" type="file" multiple="true">
+                <input id="file_upload" name="file_upload" type="file" multiple="true" onclick="reload();">
             </form>
         </div>
     </div>
@@ -86,7 +87,7 @@ session_start();
 </div>
 
 </body>
-<script type= "text/javascript" >
+<!--<script type= "text/javascript" >
     $( document ).ready(function() {
 
         $.ajax({
@@ -98,10 +99,34 @@ session_start();
 
         });
 
+        $( "#imagegallery" ).load( "listimage.php", function(response,status,xhr) {
+        console.log(response);
+        if(status=="success"){
+
+            document.getElementById("imagegallery").innerHTML=xhr.responseText;
+        }
+
+
+    });
+</script>-->
+<script type="text/javascript">
+
+    $( document ).ready(function() {
+        //window.location.reload()
+
+        $.ajax({
+            type: "POST",
+            url: "listimage.php", // file where you process the list.
+            success:function(data){
+                console.log(data);
+                $('#imagegallery').html(data);
+            }
+
+        });
+
 
     });
 </script>
-
 
 
 <html>
