@@ -17,16 +17,19 @@ $dbName = "imagegallery_db";
 /* connecting databases */
 $mysql = mysql_connect($dbHost, $dbUser, $dbPass);
 mysql_select_db($dbName);
-$query = "select * from imagemaster" ;
+$query = "select * from albummaster" ;
 $testData=  mysql_query($query);
 // $data1=  mysql_fetch_array($tesdata);
 $data = array();
 $n=0 ;
 
-while($imagedata=mysql_fetch_array($testData,MYSQL_ASSOC)){
-    $data[]=$imagedata;
+while($albumdata=mysql_fetch_array($testData,MYSQL_ASSOC)){
+    $data[]=$albumdata;
     $n++ ;
 }
+
+
+
 
 
 
@@ -44,9 +47,14 @@ while($imagedata=mysql_fetch_array($testData,MYSQL_ASSOC)){
     <link href="bootstrap/css/custome.css" rel="stylesheet" media="screen">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 
-
+    <style type="text/css">
+        .bs-example{
+            margin: 20px;
+        }
+    </style>
     <!--<link href="bootstrap/css/bootswatch.css" rel="stylesheet" media="screen">-->
 </head>
+
 <body style="padding-top: 60px;">
 <div class="navbar">
     <div class="navbar-inner">
@@ -71,9 +79,15 @@ while($imagedata=mysql_fetch_array($testData,MYSQL_ASSOC)){
     </div>
     <div class="row">
         <div class = "span12">
-            <ul id="albumgallery">
 
-            </ul>
+                <ul id="albumgallery">
+                       <?php foreach ($data as $val){?>
+                        <li id ="<?php echo $val['id'];?>"><img src='album.jpg' alt="<?php echo $val['name'];?>"
+                            class='thumb' /><a href='#'><i class='icon-remove-sign'></i></a></i><input type='checkbox' value=''> </a><?php echo $val['name']?>
+                        </li>
+<?php } ?>
+                </ul>
+
         </div>
 
     </div>
@@ -97,20 +111,20 @@ while($imagedata=mysql_fetch_array($testData,MYSQL_ASSOC)){
             }
         }
 
-        function insertAlbum(str)
-        {
-                alert(str);
-            if (window.XMLHttpRequest)
-            {// code for IE7+, Firefox, Chrome, Opera, Safari
-                xmlhttp=new XMLHttpRequest();
-            }
-            else
-            {// code for IE6, IE5
-                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-            }
-            alert(xmlhttp);
-           xmlhttp.open("GET","newalbum.php?album="+str,true);
-            xmlhttp.send();
+
+
+        function insertAlbum(str){
+
+            $.ajax({
+                type: "POST",
+                url:"newalbum.php?album="+str, // file where you process the list.
+                success:function(data){
+                    console.log(data);
+                    $("#albumgallery").append(data) ;
+                }
+
+            });
+
         }
 
 </script>
