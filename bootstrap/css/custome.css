@@ -1,0 +1,18 @@
+ul#imagegallery li {
+    display: inline-block;
+    width: 75px;
+    height: 75px;
+}
+
+ul#albumgallery li {
+    display: inline-block;
+    width: 75px;
+    height: 75px;
+}
+div#drop {
+   width:350px;
+    height:70px;
+    padding:10px;
+    border:1px;
+    solid :#aaaaaa ;
+}

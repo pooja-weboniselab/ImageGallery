@@ -83,7 +83,7 @@ while($albumdata=mysql_fetch_array($testData,MYSQL_ASSOC)){
                 <ul id="albumgallery">
                        <?php foreach ($data as $val){?>
                         <li id ="<?php echo $val['id'];?>"><img src='album.jpg' alt="<?php echo $val['name'];?>"
-                            class='thumb' /><a href='#'><i class='icon-remove-sign'></i></a></i><input type='checkbox' value=''> </a><?php echo $val['name']?>
+                            class='thumb' /><i class='icon-remove-sign' id="<?php echo $val['id'];?>" onclick="deletealbum(<?php echo $val['id'];?>)"></i></a></i><input type='checkbox' value=''> </a><?php echo $val['name']?>
                         </li>
 <?php } ?>
                 </ul>
@@ -126,6 +126,20 @@ while($albumdata=mysql_fetch_array($testData,MYSQL_ASSOC)){
             });
 
         }
+         function deleteAlbum(id){
+             $.ajax({
+                 type: "POST",
+                 url:"deletealbum.php?album="+id, // file where you process the list.
+                 success:function(data){
+                     console.log(data);
+                     $("#albumgallery").append(data) ;
+                 }
+
+             });
+
+         }
+
+
 
 </script>
 

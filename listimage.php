@@ -28,10 +28,10 @@
                     }
                     $output = '' ;
                 foreach($data as $val){
-             $output .=  "<div class='content' id='".$val['id']."'><div><a href='#'><img src='thumbnail/".$val['filename']."' alt='uploads/".$val['filename']."' class='thumb' /></a></div>
-                </div> " ;
+             $output .=  "<li  id='".$val['id']."'><a href='#'><img src='thumbnail/".$val['filename']."' alt='uploads/".$val['filename']."' class='thumb' /></a>
+                </li> " ;
                 }
 
-echo $output ;
-                   return $output ;
+            echo $output ;
+
 ?>

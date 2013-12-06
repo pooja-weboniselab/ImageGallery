@@ -8,6 +8,25 @@
  *
  */
 session_start();
+
+$dbHost = "localhost";
+$dbUser = "poojawebonise";
+$dbPass = "weboniselab";
+$dbName = "imagegallery_db";
+
+$mysql = mysql_connect($dbHost, $dbUser, $dbPass);
+mysql_select_db($dbName);
+$query = "select * from imagemaster" ;
+$testData=  mysql_query($query);
+// $data1=  mysql_fetch_array($tesdata);
+$viewdata = array();
+
+
+while($imagedata=mysql_fetch_array($testData,MYSQL_ASSOC)){
+    $viewdata[]=$imagedata;
+
+}
+
 ?>
 <!DOCTYPE html>
 
@@ -47,7 +66,10 @@ session_start();
         <div class="span10">
 
                 <ul id="imagegallery">
-
+                    <?php foreach($viewdata as $image){ ?>
+                    <li  id="<?php echo $image['id']; ?>"><a href='#'><img id="<?php echo $image['id']; ?>"src='thumbnail/<?php echo $image['filename'];?>' alt='uploads/<?php echo $image['filename'];?>' class='thumb' draggable="true" ondragstart="drag(event)"  /></a>
+                    </li>
+                    <?php  }?>
                 </ul>
         </div>
         <div class="span2" >
@@ -69,8 +91,16 @@ session_start();
 
                 },
                 'swf'      : 'uploadify/uploadify.swf',
-                'uploader' : 'uploadstatus.php'
+                'uploader' : 'uploadstatus.php',
+                'onComplete': function(event, queueID, fileObj, response, data) {
+                    console.log(fileObj.filename);
+                   // $("#imagegallery").append(data);
+                }
+
+
+
             });
+
         });
 
 
@@ -108,8 +138,7 @@ session_start();
 
 
     });
-</script>-->
-<script type="text/javascript">
+
 
     $( document ).ready(function() {
         //window.location.reload()
@@ -126,7 +155,32 @@ session_start();
 
 
     });
-</script>
+
+   $( document ).ready(function() {
+        //window.location.reload()
+
+        $.ajax({
+            type: "POST",
+            url: "listimage.php", // file where you process the list.
+            success:function(data){
+                console.log(data);
+                $('#imagegallery').html(data);
+            }
+
+        });
+
+
+    });
+    <div class = "span4">
+            <ul id="imagegallery">
+                <?php //foreach( $data as $val) { ?>
+                 <li  id='<?php //echo $val['id'];?>'><a href='#'><img src='thumbnail/<?php //echo $val['filename'];?>' alt='uploads/<?php //echo $val['filename'];?>' class='thumb' /></a>
+                </li>
+           <?php  //}?>
+            </ul>
+        </div>
+</script>-->
+
 
 
 <html>

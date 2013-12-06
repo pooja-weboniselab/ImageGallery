@@ -6,3 +6,6 @@
  * Time: 5:56 PM
  * To change this template use File | Settings | File Templates.
  */
+session_start() ;
+session_destroy();
+header( 'Location:login.php' ) ;

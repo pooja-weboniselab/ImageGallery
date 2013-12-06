@@ -25,8 +25,9 @@ if (!empty($_FILES) && $_POST['token'] == $verifyToken) {
     if (in_array($fileParts['extension'],$fileTypes)) {
         move_uploaded_file($tempFile,$targetFile);
         createThumbs($targetFile,"thumbnail/",$fileParts,$fname,50);
-        insertRecord($fname,$targetFile,$fname,'thumbnail/'.$fname,$fname,$_POST['id']);
-        echo '1';
+        $imageview = insertRecord($fname,$targetFile,$fname,'thumbnail/'.$fname,$fname,$_POST['id']);
+        echo $imageview ;
+        console.log($imageview);
     } else {
         echo 'Invalid file type.';
     }
@@ -76,7 +77,26 @@ function insertRecord($title,$targetFile,$filename,$thumbnail_path,$thumbnail,$u
                    values(0,'$title','$targetFile','$filename','$thumbnail_path','$thumbnail','$uploaded_by','$createdDate','','')" ;
 
      if(mysql_query($imagequery)) {
+         $lastquery = "select max(id) from imagemaster" ;
+         $result = mysql_query($lastquery);
+         $imagevalue=mysql_fetch_array( $result,MYSQL_ASSOC);
 
+         $query = "select * from imagemaster where id=$imagevalue" ;
+         $testData=  mysql_query($query);
+
+         $data = array();
+         $n=0 ;
+
+         while($imagelist=mysql_fetch_array($testData,MYSQL_ASSOC)){
+             $data[]=$imagelist;
+         }
+         $output = '' ;
+         foreach($data as $val){
+             $output .=  "<li  id='".$val['id']."'><a href='#'><img src='thumbnail/".$val['filename']."' alt='uploads/".$val['filename']."' class='thumb' /></a>
+                </li> " ;
+         }
+
+         return $output ;
      }
 
 }
