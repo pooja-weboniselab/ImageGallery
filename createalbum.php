@@ -75,8 +75,15 @@ while($albumdata=mysql_fetch_array($testData,MYSQL_ASSOC)){
 
                 <ul id="albumgallery">
                        <?php foreach ($data as $val){?>
-                        <li id ="<?php echo $val['id'];?>"><img src='album.jpg' alt="<?php echo $val['name'];?>"
-                            class='thumb' /><i class='icon-remove-sign' id="<?php echo $val['id'];?>" onclick="deleteAlbum(<?php echo $val['id'];?>)"></i></a></i><input type='checkbox' value=''> </a><?php echo $val['name']?>
+                        <li id ="<?php echo $val['id'];?>">
+                            <a href ="albumgallery.php?album=<?php echo $val['name'];?>&&albumID=<?php echo $val['id'];?>"><img src='album.jpg' alt="<?php echo $val['name'];?>"
+                            class='thumb' /><i class='icon-remove-sign' id="<?php echo $val['id'];?>" onclick="deleteAlbum(<?php echo $val['id'];?>)"></i>
+                            <?php if($val['status']==1){ ?>
+                            <input type='checkbox' id="publish" value='<?php echo $val['id'];?>' checked="checked">
+                           <?php }elseif($val['status']==0){ ?>
+                            <input type='checkbox' id="publish" value='<?php echo $val['id'];?>'>
+                          <?php } ?>
+                        <?php echo $val['name']?></a>
                         </li>
 <?php } ?>
                 </ul>
@@ -89,6 +96,37 @@ while($albumdata=mysql_fetch_array($testData,MYSQL_ASSOC)){
 </body>
 
     <script type="text/javascript">
+        $(document).ready(function(){
+            function triggerChange(){
+                $("#publish").trigger("live");
+            }
+
+            $("#publish").live('click', function() {
+                alert("triggered!");
+                if($(this).is(':checked')){
+                    //alert('checked');
+                    var AlbumId = $(this).val() ;
+                    alert(AlbumId);
+                    $.ajax({
+                        type: "POST",
+                        url:"publishalbum.php?albumID="+AlbumId, // file where you process the list.
+
+                        success:function(data){
+                            if(data>0){
+                                alert("album is publish");
+                            }
+
+                        }
+
+                    });
+                }
+                else{
+                    alert('unchecked');
+                }
+            });
+
+            triggerChange();
+        });
         function createAlbum()
         {
             var x;
@@ -114,6 +152,7 @@ while($albumdata=mysql_fetch_array($testData,MYSQL_ASSOC)){
                 success:function(data){
                     console.log(data);
                     $("#albumgallery").append(data) ;
+
                 }
 
             });
@@ -121,11 +160,15 @@ while($albumdata=mysql_fetch_array($testData,MYSQL_ASSOC)){
         }
          function deleteAlbum(id){
              alert(id);
+             alert($("#albumgallery").children('li').attr('id'));
              $.ajax({
                  type: "POST",
                  url:"deletealbum.php?album="+id, // file where you process the list.
                  success:function(data){
-                    alert($("#albumgallery :li").attr('id'));
+                     if(data==1){
+                         location.reload();
+                     }
+
 
                  }
 

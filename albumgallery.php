@@ -157,6 +157,7 @@ while($getimage =mysql_fetch_array($imgdata,MYSQL_ASSOC)){
         $(document).ready(function(){
         function triggerChange(){
             $("#publish").trigger("on");
+            $("#cover").trigger("on");
         }
 
         $("#publish").on('click', function() {
@@ -182,8 +183,36 @@ while($getimage =mysql_fetch_array($imgdata,MYSQL_ASSOC)){
             }
         });
 
-        triggerChange();
+
+
+        $("#cover").on('click', function() {
+            alert("triggered!");
+            if($(this).is(':checked')){
+                alert('checked');
+                var imageID= $(this).val();
+                alert(imageID);
+                var AlbumId = $("div.span3").attr('id');
+                $.ajax({
+                    type: "POST",
+                    url:"coverimage.php?imageID="+imageID+"&&albumID="+AlbumId, // file where you process the list.
+
+                    success:function(data){
+                        if(data>0){
+                            alert("album is publish");
+                        }
+
+                    }
+
+                });
+            }
+            else{
+                alert('unchecked');
+            }
         });
+
+            triggerChange();
+        });
+
     </script>
 
 
@@ -217,8 +246,8 @@ while($getimage =mysql_fetch_array($imgdata,MYSQL_ASSOC)){
     </div>
 </div>
 <div class="row">
-    <div class="span6">
-        <div id="drop" class="span4 ui-widget-content ui-state-default">
+    <div class="span8">
+        <div id="drop" class="span2 ui-widget-content ui-state-default">
 
                 <h4 class="ui-widget-header"><span class=" ">Album</span>
 
@@ -229,7 +258,8 @@ while($getimage =mysql_fetch_array($imgdata,MYSQL_ASSOC)){
             <ul id="imagegalleryshow">
                 <?php foreach($albumgrid as $val){ ?>
                 <li  id="<?php echo $val['id']; ?>"><a href='#'><img id="<?php echo $val['id']; ?>"src='thumbnail/<?php echo $val['filename'];?>' alt='uploads/<?php echo $val['filename'];?>' class='thumb'  /></a>
-                    <a href="" title="remove image from album" class="ui-icon ui-icon-trash">Delete image</a>
+                    <i class='icon-remove-sign' id="<?php echo $val['id'];?>" onclick="deleteAlbum(<?php echo $val['id'];?>)"></i>
+                    <input type='checkbox' id="cover" value='<?php echo $val['id'];?>' >
                 </li>
                 <?php  }?>
 
