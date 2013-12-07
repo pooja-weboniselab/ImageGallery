@@ -7,15 +7,10 @@
  * To change this template use File | Settings | File Templates.
  *
  */
+include 'dbconnect.php';
 session_start();
 
-$dbHost = "localhost";
-$dbUser = "poojawebonise";
-$dbPass = "weboniselab";
-$dbName = "imagegallery_db";
 
-$mysql = mysql_connect($dbHost, $dbUser, $dbPass);
-mysql_select_db($dbName);
 $query = "select * from imagemaster" ;
 $testData=  mysql_query($query);
 // $data1=  mysql_fetch_array($tesdata);

@@ -6,15 +6,15 @@
  * Time: 4:10 PM
  * To change this template use File | Settings | File Templates.
  */
-
+include 'dbconnect.php';
 $album = $_GET['album'];
-$dbHost = "localhost";
-$dbUser = "poojawebonise";
-$dbPass = "weboniselab";
-$dbName = "imagegallery_db";
+$deleteddate = date("Y-m-d",time());
 //echo $album ;
 /* connecting databases */
 $mysql = mysql_connect($dbHost, $dbUser, $dbPass);
 mysql_select_db($dbName);
 
-$deletequery = "update albummaster set deleted_date='2013-12-06' where id="
+$deletequery = "update albummaster set deleted_date='$deleteddate' where id=$album" ;
+if(mysql_query($deletequery)) {
+    echo mysql_affected_rows();
+}

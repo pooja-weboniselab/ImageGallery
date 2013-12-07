@@ -16,3 +16,10 @@ div#drop {
     border:1px;
     solid :#aaaaaa ;
 }
+
+ul#imagegalleryshow li {
+    display: inline-block;
+    width: 75px;
+    height: 75px;
+
+}

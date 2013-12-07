@@ -38,7 +38,7 @@
 
 
         <div class="span12">
-                <form id="loginForm" class="bs-example form-horizontal" method="post" action="#">
+                <form id="loginForm" class="bs-example form-horizontal" method="post" action="<?php echo $_SERVER['PHP_SELF']?>">
                     <fieldset>
 
                         <div class="control-group">
@@ -74,14 +74,7 @@
 
 
 <?php
-$dbHost = "localhost";
-$dbUser = "poojawebonise";
-$dbPass = "weboniselab";
-$dbName = "imagegallery_db";
-
-/* connecting databases */
-$mysql = mysql_connect($dbHost, $dbUser, $dbPass);
-mysql_select_db($dbName);
+include 'dbconnect.php';
 if (isset($_POST)) {
     $loginName = $_POST['loginUser'];
     $loginPass = $_POST['inputPassword'];
@@ -94,15 +87,18 @@ if (isset($_POST)) {
 
     $userData=mysql_fetch_array($testData,MYSQL_ASSOC);
 
-    if($userData['login']== $loginName && $userData['password']== $loginPass){
-        session_start();//start session
-        $_SESSION['user'] = $userData['login'] ;
-        $_SESSION['id'] = $userData['id'];// store session data
-        header( 'Location:admindashboard.php' ) ;
+     if(isset($_POST['loginUser'])){
+        if($userData['login']== $loginName && $userData['password']== $loginPass){
+            session_start();//start session
+            $_SESSION['user'] = $userData['login'] ;
+            $_SESSION['id'] = $userData['id'];// store session data
+            header( 'Location:admindashboard.php' ) ;
+        }
+        else { ?>
+        <div class="row"><div class="span12"><?php echo "wrong username and password" ; ?></div></div>
+            <?php }
     }
-    else { ?>
-      <div class="row"><div class="span12"><?php echo "wrong username and password" ; ?></div></div>
-    <?php }
+
 
     //var_dump($userData);
 

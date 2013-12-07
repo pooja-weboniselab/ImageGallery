@@ -6,7 +6,7 @@
  * Time: 12:26 PM
  * To change this template use File | Settings | File Templates.
  */
-
+include 'dbconnect.php';
 //session_start();
 // Define a destination
 $targetFolder = '/uploads'; // Relative to the root
@@ -63,15 +63,9 @@ function createThumbs( $pathToImages, $pathToThumbs, $fileParts, $fname ,$thumbW
 
 function insertRecord($title,$targetFile,$filename,$thumbnail_path,$thumbnail,$uploaded_by){
 
-    $dbHost = "localhost";
-    $dbUser = "poojawebonise";
-    $dbPass = "weboniselab";
-    $dbName = "imagegallery_db";
 
-    /* connecting databases */
-    $mysql = mysql_connect($dbHost, $dbUser, $dbPass);
-    mysql_select_db($dbName);
-    $createdDate = date('YYYY-mm-dd',time());
+    //$set_date = date("Y-m-d", strtotime($date));
+    $createdDate = date("Y-m-d",time());
 
     $imagequery = "insert into imagemaster(id,title,path,filename,thumbnail_path,thumbnail,uploaded_by,created_date,deleted_date,modified_date)
                    values(0,'$title','$targetFile','$filename','$thumbnail_path','$thumbnail','$uploaded_by','$createdDate','','')" ;

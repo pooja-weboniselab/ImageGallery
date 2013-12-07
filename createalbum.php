@@ -9,15 +9,8 @@
  */
 session_start();
 
-$dbHost = "localhost";
-$dbUser = "poojawebonise";
-$dbPass = "weboniselab";
-$dbName = "imagegallery_db";
-
-/* connecting databases */
-$mysql = mysql_connect($dbHost, $dbUser, $dbPass);
-mysql_select_db($dbName);
-$query = "select * from albummaster" ;
+include 'dbconnect.php';
+$query = "select * from albummaster where deleted_date='0000-00-00' " ;
 $testData=  mysql_query($query);
 // $data1=  mysql_fetch_array($tesdata);
 $data = array();
@@ -83,7 +76,7 @@ while($albumdata=mysql_fetch_array($testData,MYSQL_ASSOC)){
                 <ul id="albumgallery">
                        <?php foreach ($data as $val){?>
                         <li id ="<?php echo $val['id'];?>"><img src='album.jpg' alt="<?php echo $val['name'];?>"
-                            class='thumb' /><i class='icon-remove-sign' id="<?php echo $val['id'];?>" onclick="deletealbum(<?php echo $val['id'];?>)"></i></a></i><input type='checkbox' value=''> </a><?php echo $val['name']?>
+                            class='thumb' /><i class='icon-remove-sign' id="<?php echo $val['id'];?>" onclick="deleteAlbum(<?php echo $val['id'];?>)"></i></a></i><input type='checkbox' value=''> </a><?php echo $val['name']?>
                         </li>
 <?php } ?>
                 </ul>
@@ -127,12 +120,13 @@ while($albumdata=mysql_fetch_array($testData,MYSQL_ASSOC)){
 
         }
          function deleteAlbum(id){
+             alert(id);
              $.ajax({
                  type: "POST",
                  url:"deletealbum.php?album="+id, // file where you process the list.
                  success:function(data){
-                     console.log(data);
-                     $("#albumgallery").append(data) ;
+                    alert($("#albumgallery :li").attr('id'));
+
                  }
 
              });
