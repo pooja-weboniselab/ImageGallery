@@ -10,17 +10,6 @@
 require_once ("dbquery.php") ;
 session_start();
 
-/*
-$query = "select * from imagemaster" ;
-$testData=  mysql_query($query);
-// $data1=  mysql_fetch_array($tesdata);
-$viewdata = array();
-
-
-while($imagedata=mysql_fetch_array($testData,MYSQL_ASSOC)){
-    $viewdata[]=$imagedata;
-
-}*/
 $dbObj = new dbQuery() ;
 $viewData = $dbObj->listImageMaster();
 
@@ -42,6 +31,31 @@ $viewData = $dbObj->listImageMaster();
             font: 13px Arial, Helvetica, Sans-serif;
         }
     </style>
+    <script type="text/javascript">
+        <?php $timestamp = time();?>
+        $(function() {
+            $('#file_upload').uploadify({
+                'formData'     : {
+                    'timestamp' : '<?php echo $timestamp;?>',
+                    'token'     : '<?php echo md5('unique_salt' . $timestamp);?>',
+                    'id'        : '<?php echo $_SESSION['id'] ; ?>'
+
+                },
+                'swf'      : 'uploadify/uploadify.swf',
+                'uploader' : 'uploadstatus.php',
+                'onComplete': function(event, queueID, fileObj, response, data) {
+                    console.log(fileObj.filename);
+                    // $("#imagegallery").append(data);
+                }
+
+
+
+            });
+
+        });
+
+
+    </script>
 
     <!--<link href="bootstrap/css/bootswatch.css" rel="stylesheet" media="screen">-->
 </head>
@@ -77,31 +91,7 @@ $viewData = $dbObj->listImageMaster();
         </div>
     </div>
 
-    <script type="text/javascript">
-        <?php $timestamp = time();?>
-        $(function() {
-            $('#file_upload').uploadify({
-                'formData'     : {
-                    'timestamp' : '<?php echo $timestamp;?>',
-                    'token'     : '<?php echo md5('unique_salt' . $timestamp);?>',
-                    'id'        : '<?php echo $_SESSION['id'] ; ?>'
 
-                },
-                'swf'      : 'uploadify/uploadify.swf',
-                'uploader' : 'uploadstatus.php',
-                'onComplete': function(event, queueID, fileObj, response, data) {
-                    console.log(fileObj.filename);
-                   // $("#imagegallery").append(data);
-                }
-
-
-
-            });
-
-        });
-
-
-    </script>
 </div>
 
 <!-- Containers

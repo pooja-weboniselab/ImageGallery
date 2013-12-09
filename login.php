@@ -66,18 +66,11 @@
             </div>
 
     </div>
-
-
-
-
-
-
-
 <?php
 require_once ("dbquery.php") ;
 if (isset($_POST)) {
     $loginName = $_POST['loginUser'];
-    $loginPass = $_POST['inputPassword'];
+    $loginPass = md5($_POST['inputPassword']);
 
      $dbObj = new dbQuery() ;
      $userData = $dbObj->loginPage();

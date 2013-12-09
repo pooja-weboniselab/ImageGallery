@@ -1,9 +1,6 @@
 
 <?php
 
-//SELECT * FROM table1 LEFT JOIN table2 ON table1.id=table2.id
- // LEFT JOIN table3 ON table2.id=table3.id;
-//SELECT ac.country FROM all_countries ac INNER JOIN supported_countries sc ON sc.country_name != ac.country_name
 $albumID = $_GET['albumID'];
 $album = $_GET['album'];
 session_start();
@@ -15,7 +12,7 @@ $dbObj = new dbQuery() ;
 $viewData = $dbObj->filterAlbumImage($albumID);
 $albumShow = $dbObj->showAlbum($albumID);
 $albumGrid = $dbObj->getAlbumImageRelation($albumID);
-//var_dump($albumGrid );
+
 ?>
 
 <!DOCTYPE html>
@@ -26,9 +23,9 @@ $albumGrid = $dbObj->getAlbumImageRelation($albumID);
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
 <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <link rel="stylesheet" href="jquery/css/jquery-ui.css">
+    <script src="jquery/js/jquery-1.9.1.js"></script>
+    <script src="jquery/js/jquery-ui.js"></script>
 
 
     <link href="bootstrap/css/custome.css" rel="stylesheet" media="screen">
