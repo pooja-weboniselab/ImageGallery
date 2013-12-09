@@ -7,17 +7,12 @@
  * To change this template use File | Settings | File Templates.
  */
 
-include 'dbconnect.php';
+include 'dbquery.php';
 $image = $_GET['imageID'];
 $album = $_GET['albumID'];
-$modifeddate = date("Y-m-d",time());
+$modifiedDate = date("Y-m-d",time());
 //echo $album;
 /* connecting databases */
-$mysql = mysql_connect($dbHost, $dbUser, $dbPass);
-mysql_select_db($dbName);
-
-$coverquery = "update albummaster set coverId=$image ,modified_date='$modifeddate' where id=$album " ;
-//echo $publishquery ;
-if(mysql_query($coverquery)) {
-    echo mysql_affected_rows();
-}
+$dbObj = new dbQuery() ;
+$output = $dbObj->setCover($album,$image,$modifiedDate);
+echo $output ;

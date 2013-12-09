@@ -1,44 +1,21 @@
 
 <?php
+
+//SELECT * FROM table1 LEFT JOIN table2 ON table1.id=table2.id
+ // LEFT JOIN table3 ON table2.id=table3.id;
+//SELECT ac.country FROM all_countries ac INNER JOIN supported_countries sc ON sc.country_name != ac.country_name
 $albumID = $_GET['albumID'];
 $album = $_GET['album'];
 session_start();
 
-include 'dbconnect.php';
-$query = "select * from imagemaster" ;
-$testData=  mysql_query($query);
-// $data1=  mysql_fetch_array($tesdata);
-$viewdata = array();
+require_once('dbquery.php');
 
 
-while($imagedata=mysql_fetch_array($testData,MYSQL_ASSOC)){
-    $viewdata[]=$imagedata;
-
-}
-
-$albumquery = "select * from albummaster where id=$albumID" ;
-$testData=  mysql_query($albumquery);
-// $data1=  mysql_fetch_array($tesdata);
-$albumshow= array();
-$n=0 ;
-
-while($albumview=mysql_fetch_array($testData,MYSQL_ASSOC)){
-    $albumshow[]=$albumview;
-    $n++ ;
-}
-//var_dump($albumshow[0]['status']);
-$listalbumimage = "select img.id , img.title , img.thumbnail , img.filename  , albimg.alias
-                    from imagemaster as img ,
-                    albumimagerelation as albimg
-                    where albimg.imgid = img.id and albimg.albumid=$albumID" ;
-$imgdata = mysql_query($listalbumimage);
-$albumgrid = array();
-while($getimage =mysql_fetch_array($imgdata,MYSQL_ASSOC)){
-    $albumgrid[]=$getimage;
-    $n++ ;
-}
-
-//var_dump($albumgrid);
+$dbObj = new dbQuery() ;
+$viewData = $dbObj->filterAlbumImage($albumID);
+$albumShow = $dbObj->showAlbum($albumID);
+$albumGrid = $dbObj->getAlbumImageRelation($albumID);
+//var_dump($albumGrid );
 ?>
 
 <!DOCTYPE html>
@@ -81,7 +58,7 @@ while($getimage =mysql_fetch_array($imgdata,MYSQL_ASSOC)){
                 activeClass: "ui-state-highlight",
                 drop: function( event, ui ) {
                     deleteImage( ui.draggable );
-                    insertimageToalbum(ui.draggable);
+                    insertImageToAlbum(ui.draggable);
                 }
             });
 // let the gallery be droppable as well, accepting items from the trash
@@ -110,7 +87,7 @@ while($getimage =mysql_fetch_array($imgdata,MYSQL_ASSOC)){
 
             }
 
-            function insertimageToalbum($item){
+            function insertImageToAlbum($item){
                alert($item.prop('id'));
                 var ID = $item.prop('id') ;
                 var AlbumId = $("div.span3").attr('id');
@@ -127,6 +104,8 @@ while($getimage =mysql_fetch_array($imgdata,MYSQL_ASSOC)){
 
 
             }
+
+
 
 // image preview function, demonstrating the ui.dialog used as a modal window
             function viewLargerImage( $link ) {
@@ -155,9 +134,38 @@ while($getimage =mysql_fetch_array($imgdata,MYSQL_ASSOC)){
 
     <script type="text/javascript">
         $(document).ready(function(){
+
+            function coverAlbum(id){
+                alert(id);
+                $("#cover"+id).on('click', function() {
+                    alert("triggered!");
+                    if($(this).is(':checked')){
+                        alert('checked');
+                        var imageID= id ;
+                        alert(imageID);
+                        var AlbumId = $("div.span3").attr('id');
+                        $.ajax({
+                            type: "POST",
+                            url:"coverimage.php?imageID="+imageID+"&&albumID="+AlbumId, // file where you process the list.
+
+                            success:function(data){
+                                if(data>0){
+                                    alert("album is publish");
+                                }
+
+                            }
+
+                        });
+                    }
+                    else{
+                        alert('unchecked');
+                    }
+                });
+            }
+
         function triggerChange(){
             $("#publish").trigger("on");
-            $("#cover").trigger("on");
+
         }
 
         $("#publish").on('click', function() {
@@ -185,34 +193,33 @@ while($getimage =mysql_fetch_array($imgdata,MYSQL_ASSOC)){
 
 
 
-        $("#cover").on('click', function() {
-            alert("triggered!");
-            if($(this).is(':checked')){
-                alert('checked');
-                var imageID= $(this).val();
-                alert(imageID);
-                var AlbumId = $("div.span3").attr('id');
-                $.ajax({
-                    type: "POST",
-                    url:"coverimage.php?imageID="+imageID+"&&albumID="+AlbumId, // file where you process the list.
-
-                    success:function(data){
-                        if(data>0){
-                            alert("album is publish");
-                        }
-
-                    }
-
-                });
-            }
-            else{
-                alert('unchecked');
-            }
-        });
-
             triggerChange();
         });
 
+        function coverAlbum(id){
+            alert(id);
+
+                alert("triggered!");
+
+                    alert('checked');
+                    var imageID= id;
+                    alert(imageID);
+                    var AlbumId = $("div.span3").attr('id');
+                    $.ajax({
+                        type: "POST",
+                        url:"coverimage.php?imageID="+imageID+"&&albumID="+AlbumId, // file where you process the list.
+
+                        success:function(data){
+                            if(data>0){
+                                alert("album is publish");
+                            }
+
+                        }
+
+                    });
+
+
+        }
     </script>
 
 
@@ -226,8 +233,8 @@ while($getimage =mysql_fetch_array($imgdata,MYSQL_ASSOC)){
     <div class="navbar-inner">
         <a class="brand" href="#">Image Gallery</a>
         <ul class="nav">
-            <li class="active"><a href="#">upload Image</a></li>
-            <li><a href="#">create Album</a></li>
+            <li class="active"><a href="admindashboard.php">upload Image</a></li>
+            <li><a href="createalbum.php">create Album</a></li>
             <li><a href="logout.php">logout</a></li>
         </ul>
     </div>
@@ -238,9 +245,9 @@ while($getimage =mysql_fetch_array($imgdata,MYSQL_ASSOC)){
         <h4><?php echo $album ;?></h4>
         </div>
     <div class="span9">
-        <?php if($albumshow[0]['status']==1){?>
+        <?php if($albumShow[0]['status']==1){?>
         <input type="checkbox" id="publish" accept="" checked="checked"> Publish this Album</input>
-            <?php }elseif($albumshow[0]['status']==0){ ?>
+            <?php }elseif($albumShow[0]['status']==0){ ?>
         <input type="checkbox" id="publish" accept="" > Publish this Album</input>
    <?php  } ?>
     </div>
@@ -256,10 +263,10 @@ while($getimage =mysql_fetch_array($imgdata,MYSQL_ASSOC)){
         <div class="span6">
             <div id="imageview">
             <ul id="imagegalleryshow">
-                <?php foreach($albumgrid as $val){ ?>
+                <?php foreach($albumGrid as $val){ ?>
                 <li  id="<?php echo $val['id']; ?>"><a href='#'><img id="<?php echo $val['id']; ?>"src='thumbnail/<?php echo $val['filename'];?>' alt='uploads/<?php echo $val['filename'];?>' class='thumb'  /></a>
                     <i class='icon-remove-sign' id="<?php echo $val['id'];?>" onclick="deleteAlbum(<?php echo $val['id'];?>)"></i>
-                    <input type='checkbox' id="cover" value='<?php echo $val['id'];?>' >
+                    <input type='checkbox' id="cover<?php echo $val['id'];?>" value='<?php echo $val['id'];?>' onclick="coverAlbum(<?php echo $val['id'];?>)">
                 </li>
                 <?php  }?>
 
@@ -270,7 +277,7 @@ while($getimage =mysql_fetch_array($imgdata,MYSQL_ASSOC)){
     <div class="span4" >
        <ul id="imagegallery">
 
-           <?php foreach($viewdata as $image){ ?>
+           <?php foreach($viewData as $image){ ?>
                     <li  id="<?php echo $image['id']; ?>"><a href='#'><img id="<?php echo $image['id']; ?>"src='thumbnail/<?php echo $image['filename'];?>' alt='uploads/<?php echo $image['filename'];?>' class='thumb'  /></a>
                     </li>
              <?php  }?>

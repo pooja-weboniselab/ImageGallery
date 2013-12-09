@@ -6,15 +6,11 @@
  * Time: 4:10 PM
  * To change this template use File | Settings | File Templates.
  */
-include 'dbconnect.php';
+include 'dbquery.php';
 $album = $_GET['album'];
-$deleteddate = date("Y-m-d",time());
+$deletedDate = date("Y-m-d",time());
 //echo $album ;
 /* connecting databases */
-$mysql = mysql_connect($dbHost, $dbUser, $dbPass);
-mysql_select_db($dbName);
-
-$deletequery = "update albummaster set deleted_date='$deleteddate' where id=$album" ;
-if(mysql_query($deletequery)) {
-    echo mysql_affected_rows();
-}
+$dbObj = new dbQuery() ;
+$output = $dbObj->deleteAlbum($album,$deletedDate);
+echo $output ;

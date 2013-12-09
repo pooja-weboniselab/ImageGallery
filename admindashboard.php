@@ -7,10 +7,10 @@
  * To change this template use File | Settings | File Templates.
  *
  */
-include 'dbconnect.php';
+require_once ("dbquery.php") ;
 session_start();
 
-
+/*
 $query = "select * from imagemaster" ;
 $testData=  mysql_query($query);
 // $data1=  mysql_fetch_array($tesdata);
@@ -20,7 +20,9 @@ $viewdata = array();
 while($imagedata=mysql_fetch_array($testData,MYSQL_ASSOC)){
     $viewdata[]=$imagedata;
 
-}
+}*/
+$dbObj = new dbQuery() ;
+$viewData = $dbObj->listImageMaster();
 
 ?>
 <!DOCTYPE html>
@@ -49,7 +51,7 @@ while($imagedata=mysql_fetch_array($testData,MYSQL_ASSOC)){
         <a class="brand" href="#">Image Gallery</a>
         <ul class="nav">
             <li class="active"><a href="#">upload Image</a></li>
-            <li><a href="#">create Album</a></li>
+            <li><a href="createalbum.php">create Album</a></li>
             <li><a href="logout.php">logout</a></li>
         </ul>
     </div>
@@ -61,7 +63,7 @@ while($imagedata=mysql_fetch_array($testData,MYSQL_ASSOC)){
         <div class="span10">
 
                 <ul id="imagegallery">
-                    <?php foreach($viewdata as $image){ ?>
+                    <?php foreach($viewData as $image){ ?>
                     <li  id="<?php echo $image['id']; ?>"><a href='#'><img id="<?php echo $image['id']; ?>"src='thumbnail/<?php echo $image['filename'];?>' alt='uploads/<?php echo $image['filename'];?>' class='thumb' draggable="true" ondragstart="drag(event)"  /></a>
                     </li>
                     <?php  }?>
@@ -112,70 +114,6 @@ while($imagedata=mysql_fetch_array($testData,MYSQL_ASSOC)){
 </div>
 
 </body>
-<!--<script type= "text/javascript" >
-    $( document ).ready(function() {
-
-        $.ajax({
-            type: "GET",
-            url: "listimage.php", // file where you process the list.
-            success:function(data){
-                $('#imagegallery').html(data);
-            }
-
-        });
-
-        $( "#imagegallery" ).load( "listimage.php", function(response,status,xhr) {
-        console.log(response);
-        if(status=="success"){
-
-            document.getElementById("imagegallery").innerHTML=xhr.responseText;
-        }
-
-
-    });
-
-
-    $( document ).ready(function() {
-        //window.location.reload()
-
-        $.ajax({
-            type: "POST",
-            url: "listimage.php", // file where you process the list.
-            success:function(data){
-                console.log(data);
-                $('#imagegallery').html(data);
-            }
-
-        });
-
-
-    });
-
-   $( document ).ready(function() {
-        //window.location.reload()
-
-        $.ajax({
-            type: "POST",
-            url: "listimage.php", // file where you process the list.
-            success:function(data){
-                console.log(data);
-                $('#imagegallery').html(data);
-            }
-
-        });
-
-
-    });
-    <div class = "span4">
-            <ul id="imagegallery">
-                <?php //foreach( $data as $val) { ?>
-                 <li  id='<?php //echo $val['id'];?>'><a href='#'><img src='thumbnail/<?php //echo $val['filename'];?>' alt='uploads/<?php //echo $val['filename'];?>' class='thumb' /></a>
-                </li>
-           <?php  //}?>
-            </ul>
-        </div>
-</script>-->
-
 
 
 <html>

@@ -6,7 +6,7 @@
  * Time: 12:26 PM
  * To change this template use File | Settings | File Templates.
  */
-include 'dbconnect.php';
+require_once ("dbquery.php") ;
 //session_start();
 // Define a destination
 $targetFolder = '/uploads'; // Relative to the root
@@ -66,32 +66,17 @@ function insertRecord($title,$targetFile,$filename,$thumbnail_path,$thumbnail,$u
 
     //$set_date = date("Y-m-d", strtotime($date));
     $createdDate = date("Y-m-d",time());
+            $dbObj = new dbQuery() ;
+            $listData = $dbObj->setImageMaster($title,$targetFile,$filename,$thumbnail_path,$thumbnail,$uploaded_by,$createdDate);
 
-    $imagequery = "insert into imagemaster(id,title,path,filename,thumbnail_path,thumbnail,uploaded_by,created_date,deleted_date,modified_date)
-                   values(0,'$title','$targetFile','$filename','$thumbnail_path','$thumbnail','$uploaded_by','$createdDate','','')" ;
-
-     if(mysql_query($imagequery)) {
-         $lastquery = "select max(id) from imagemaster" ;
-         $result = mysql_query($lastquery);
-         $imagevalue=mysql_fetch_array( $result,MYSQL_ASSOC);
-
-         $query = "select * from imagemaster where id=$imagevalue" ;
-         $testData=  mysql_query($query);
-
-         $data = array();
-         $n=0 ;
-
-         while($imagelist=mysql_fetch_array($testData,MYSQL_ASSOC)){
-             $data[]=$imagelist;
-         }
          $output = '' ;
-         foreach($data as $val){
+         foreach($listData as $val){
              $output .=  "<li  id='".$val['id']."'><a href='#'><img src='thumbnail/".$val['filename']."' alt='uploads/".$val['filename']."' class='thumb' /></a>
                 </li> " ;
          }
 
          return $output ;
-     }
+
 
 }
 

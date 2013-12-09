@@ -9,19 +9,13 @@
  */
 session_start();
 
-include 'dbconnect.php';
-$query = "select * from albummaster where deleted_date='0000-00-00' " ;
-$testData=  mysql_query($query);
-// $data1=  mysql_fetch_array($tesdata);
-$data = array();
-$n=0 ;
-
-while($albumdata=mysql_fetch_array($testData,MYSQL_ASSOC)){
-    $data[]=$albumdata;
-    $n++ ;
-}
+include 'dbquery.php';
+$dbObj = new dbQuery() ;
+$albumData = $dbObj->showAlbum('');
+$coverPhoto = $dbObj->getCover();
 
 
+//var_dump($coverPhoto);
 
 
 
@@ -53,7 +47,7 @@ while($albumdata=mysql_fetch_array($testData,MYSQL_ASSOC)){
     <div class="navbar-inner">
         <a class="brand" href="#">Image Gallery</a>
         <ul class="nav">
-            <li class="active"><a href="#">upload Image</a></li>
+            <li class="active"><a href="admindashboard.php">upload Image</a></li>
             <li><a href="#">create Album</a></li>
             <li><a href="logout.php">logout</a></li>
         </ul>
@@ -74,16 +68,21 @@ while($albumdata=mysql_fetch_array($testData,MYSQL_ASSOC)){
         <div class = "span12">
 
                 <ul id="albumgallery">
-                       <?php foreach ($data as $val){?>
+                       <?php foreach ($albumData as $val){?>
                         <li id ="<?php echo $val['id'];?>">
-                            <a href ="albumgallery.php?album=<?php echo $val['name'];?>&&albumID=<?php echo $val['id'];?>"><img src='album.jpg' alt="<?php echo $val['name'];?>"
-                            class='thumb' /><i class='icon-remove-sign' id="<?php echo $val['id'];?>" onclick="deleteAlbum(<?php echo $val['id'];?>)"></i>
+                            <a href ="albumgallery.php?album=<?php echo $val['name'];?>&&albumID=<?php echo $val['id'];?>">
+                                <?php if($val['coverId']!=0) { ?>
+         <img src='thumbnail/<?php echo $coverPhoto[$val['id']];?>' alt="<?php echo $val['name'];?>" class='thumb' />
+              <?php }else{ ?>
+                          <img src='album.jpg' alt="<?php echo $val['name'];?>" class='thumb' />
+                           <?php }?>
+                            </a><i class='icon-remove-sign' id="<?php echo $val['id'];?>" onclick="deleteAlbum(<?php echo $val['id'];?>)"></i>
                             <?php if($val['status']==1){ ?>
                             <input type='checkbox' id="publish" value='<?php echo $val['id'];?>' checked="checked">
                            <?php }elseif($val['status']==0){ ?>
                             <input type='checkbox' id="publish" value='<?php echo $val['id'];?>'>
                           <?php } ?>
-                        <?php echo $val['name']?></a>
+                        <?php echo $val['name']?>
                         </li>
 <?php } ?>
                 </ul>
@@ -129,14 +128,14 @@ while($albumdata=mysql_fetch_array($testData,MYSQL_ASSOC)){
         });
         function createAlbum()
         {
-            var x;
+            var newAlbum;
 
-            var person=prompt("Album name","");
+            var album=prompt("Album name","");
 
-            if (person!=null)
+            if (album!=null)
             {
-                x= person ;
-                insertAlbum(x);
+                newAlbum= album;
+                insertAlbum(newAlbum);
 
 
             }
@@ -165,6 +164,7 @@ while($albumdata=mysql_fetch_array($testData,MYSQL_ASSOC)){
                  type: "POST",
                  url:"deletealbum.php?album="+id, // file where you process the list.
                  success:function(data){
+                    // alert(data)
                      if(data==1){
                          location.reload();
                      }

@@ -74,18 +74,14 @@
 
 
 <?php
-include 'dbconnect.php';
+require_once ("dbquery.php") ;
 if (isset($_POST)) {
     $loginName = $_POST['loginUser'];
     $loginPass = $_POST['inputPassword'];
-    $query = "select id,login, password from usermaster where roleId=1" ;
-    $testData=  mysql_query($query);
-    // $data1=  mysql_fetch_array($tesdata);
 
-    $data = array();
-    $n=0 ;
-
-    $userData=mysql_fetch_array($testData,MYSQL_ASSOC);
+     $dbObj = new dbQuery() ;
+     $userData = $dbObj->loginPage();
+     //echo $userData['login'];
 
      if(isset($_POST['loginUser'])){
         if($userData['login']== $loginName && $userData['password']== $loginPass){
@@ -98,9 +94,6 @@ if (isset($_POST)) {
         <div class="row"><div class="span12"><?php echo "wrong username and password" ; ?></div></div>
             <?php }
     }
-
-
-    //var_dump($userData);
 
 } ?>
 </div>
