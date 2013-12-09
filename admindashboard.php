@@ -10,7 +10,7 @@
 require_once ("dbquery.php") ;
 session_start();
 
-$dbObj = new dbQuery() ;
+
 $viewData = $dbObj->listImageMaster();
 
 ?>
@@ -27,9 +27,7 @@ $viewData = $dbObj->listImageMaster();
     <script src="uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="uploadify/uploadify.css">
     <style type="text/css">
-        body {
-            font: 13px Arial, Helvetica, Sans-serif;
-        }
+
     </style>
     <script type="text/javascript">
         <?php $timestamp = time();?>

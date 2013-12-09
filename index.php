@@ -9,30 +9,9 @@
  */
 session_start();
 
-include 'dbconnect.php';
-$query = "select * from albummaster where deleted_date='0000-00-00' and status = 1 " ;
-$testData=  mysql_query($query);
-// $data1=  mysql_fetch_array($tesdata);
-$data = array();
-$n=0 ;
-
-while($albumdata=mysql_fetch_array($testData,MYSQL_ASSOC)){
-    $data[]=$albumdata;
-    $n++ ;
-}
-$albumcover = array();
-foreach ($data as $value){
-    if(isset($value['coverId'])!=0){
-        $id = $value['coverId'] ;
-        $query = "select * from imagemaster where id=$id ";
-        $imageData=  mysql_query($query);
-    }
-    $albumcover = mysql_fetch_array($imageData,MYSQL_ASSOC);
-    //var_dump($albumcover) ;
-    $coverphoto[$value['id']]['cover'] = $albumcover['filename'] ;
-}
-
-
+include 'dbquery.php';
+$albumGallery = $dbObj->albumGallery() ;
+$getCover = $dbObj->getCover();
 
 
 
@@ -77,11 +56,11 @@ foreach ($data as $value){
         <div class = "span12">
 
             <ul id="albumgallery">
-                <?php foreach ($data as $val){?>
+                <?php foreach ($albumGallery as $val){?>
                 <li id ="<?php echo $val['id'];?>">
                     <a href ="albumgallery.php?album=<?php echo $val['name'];?>&&albumID=<?php echo $val['id'];?>">
                         <?php if($val['coverId']!=0) { ?>
-         <img src='thumbnail/<?php echo $coverphoto[$val['id']]['cover'];?>' alt="<?php echo $val['name'];?>"
+         <img src='thumbnail/<?php echo $getCover[$val['id']];?>' alt="<?php echo $val['name'];?>"
               <?php }else{ ?>
                             <img src='album.jpg' alt="<?php echo $val['name'];?>"
                         <?php }?>

@@ -11,6 +11,6 @@ $album = $_GET['album'];
 $deletedDate = date("Y-m-d",time());
 //echo $album ;
 /* connecting databases */
-$dbObj = new dbQuery() ;
+
 $output = $dbObj->deleteAlbum($album,$deletedDate);
 echo $output ;

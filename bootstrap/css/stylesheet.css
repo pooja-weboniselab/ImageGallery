@@ -1,0 +1,7 @@
+#drop { float: right; width: 32%; min-height: 18em; padding: 1%; }
+#drop h4 { line-height: 16px; margin: 0 0 0.4em; }
+#drop h4 .ui-icon { float: left; }
+#drop .gallery h5 { display: none; }
+body {
+    font: 13px Arial, Helvetica, Sans-serif;
+}

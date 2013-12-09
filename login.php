@@ -72,7 +72,7 @@ if (isset($_POST)) {
     $loginName = $_POST['loginUser'];
     $loginPass = md5($_POST['inputPassword']);
 
-     $dbObj = new dbQuery() ;
+
      $userData = $dbObj->loginPage();
      //echo $userData['login'];
 

@@ -10,7 +10,7 @@
 session_start();
 
 include 'dbquery.php';
-$dbObj = new dbQuery() ;
+
 $albumData = $dbObj->showAlbum('');
 $coverPhoto = $dbObj->getCover();
 
@@ -33,16 +33,11 @@ $coverPhoto = $dbObj->getCover();
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="bootstrap/css/custome.css" rel="stylesheet" media="screen">
     <script src="jquery/js/jquery.min.js" type="text/javascript"></script>
-
-    <style type="text/css">
-        .bs-example{
-            margin: 20px;
-        }
-    </style>
-    <!--<link href="bootstrap/css/bootswatch.css" rel="stylesheet" media="screen">-->
+    <script src="bootstrap/js/createalbum.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function(){
+
             function triggerChange(){
                 $("#publish").trigger("live");
             }
@@ -71,58 +66,9 @@ $coverPhoto = $dbObj->getCover();
                 }
             });
 
+
             triggerChange();
         });
-        function createAlbum()
-        {
-            var newAlbum;
-
-            var album=prompt("Album name","");
-
-            if (album!=null)
-            {
-                newAlbum= album;
-                insertAlbum(newAlbum);
-
-
-            }
-        }
-
-
-
-        function insertAlbum(str){
-
-            $.ajax({
-                type: "POST",
-                url:"newalbum.php?album="+str, // file where you process the list.
-                success:function(data){
-                    console.log(data);
-                    $("#albumgallery").append(data) ;
-
-                }
-
-            });
-
-        }
-        function deleteAlbum(id){
-            alert(id);
-            alert($("#albumgallery").children('li').attr('id'));
-            $.ajax({
-                type: "POST",
-                url:"deletealbum.php?album="+id, // file where you process the list.
-                success:function(data){
-                    // alert(data)
-                    if(data==1){
-                        location.reload();
-                    }
-
-
-                }
-
-            });
-
-        }
-
 
 
     </script>
@@ -147,7 +93,7 @@ $coverPhoto = $dbObj->getCover();
         </div>
         <div class="span2">
             <button class=" "onclick="createAlbum()" >create Album</button>
-            <input type="hidden" id="album">
+
         </div>
     </div>
     <div class="row">

@@ -108,7 +108,7 @@ class dbQuery{
 
         }
          return $viewData ;
-         }
+    }
 
     public function getAlbumImageRelation($albumID){
         $listAlbumImage = "select img.id , img.title , img.thumbnail , img.filename  , albimg.alias
@@ -145,6 +145,8 @@ class dbQuery{
 //echo $publishquery ;
             if(mysql_query($coverQuery)) {
                 return mysql_affected_rows();
+            }else{
+                return mysql_error();
             }
         }
 
@@ -156,6 +158,9 @@ class dbQuery{
         if(mysql_query($publishQuery)) {
             return mysql_affected_rows();
         }
+        else{
+            return mysql_error();
+        }
     }
 
     public function deleteAlbum($album,$deletedDate){
@@ -163,6 +168,9 @@ class dbQuery{
         if(mysql_query($deleteQuery)) {
             return mysql_affected_rows();
 
+        }
+        else {
+            return mysql_error();
         }
     }
 
@@ -172,6 +180,25 @@ class dbQuery{
         if(mysql_query($albumImageRelation)){
             return "true" ;
         }
+        else {
+           return  mysql_error() ;
+        }
+    }
+    public function albumGallery() {
+        $getAlbum = "select * from albummaster where deleted_date='0000-00-00' and status = 1 " ;
+        $testData=  mysql_query($getAlbum);
+// $data1=  mysql_fetch_array($tesdata);
+        $albumGallery = array();
+        $count=0 ;
+
+        while($albumData=mysql_fetch_array($testData,MYSQL_ASSOC)){
+            $albumGallery[]=$albumData;
+            $count++ ;
+        }
+
+        return $albumGallery ;
+
     }
 }
+$dbObj = new dbQuery() ;
 

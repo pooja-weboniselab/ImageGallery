@@ -13,6 +13,6 @@ $album = $_GET['albumID'];
 $modifiedDate = date("Y-m-d",time());
 //echo $album;
 /* connecting databases */
-$dbObj = new dbQuery() ;
+
 $output = $dbObj->setCover($album,$image,$modifiedDate);
 echo $output ;

@@ -12,5 +12,5 @@ $album = $_GET['albumID'];
 $modifeddate = date("Y-m-d",time());
 //echo $album;
 /* connecting databases */
-$dbObj = new dbQuery() ;
+
 $dbObj->publishAlbum($album,$modifiedDate);
