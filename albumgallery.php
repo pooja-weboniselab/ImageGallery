@@ -12,7 +12,8 @@ require_once('dbquery.php');
 $viewData = $dbObj->filterAlbumImage($albumID);
 $albumShow = $dbObj->showAlbum($albumID);
 $albumGrid = $dbObj->getAlbumImageRelation($albumID);
-
+$getCover = $dbObj->getCover();
+//var_dump($getCover) ;
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +41,7 @@ $albumGrid = $dbObj->getAlbumImageRelation($albumID);
             }
 
             $("#publish").on('click', function() {
-                alert("triggered!");
+               // alert("triggered!");
                 if($(this).is(':checked')){
                     //alert('checked');
                     var AlbumId = $("div.span3").attr('id');
@@ -109,8 +110,13 @@ $albumGrid = $dbObj->getAlbumImageRelation($albumID);
             <ul id="imagegalleryshow">
                 <?php foreach($albumGrid as $val){ ?>
                 <li  id="<?php echo $val['id']; ?>"><a href='#'><img id="<?php echo $val['id']; ?>"src='thumbnail/<?php echo $val['filename'];?>' alt='uploads/<?php echo $val['filename'];?>' class='thumb'  /></a>
-                    <i class='icon-remove-sign' id="<?php echo $val['id'];?>" onclick="deleteAlbum(<?php echo $val['id'];?>)"></i>
-                    <input type='checkbox' id="cover<?php echo $val['id'];?>" value='<?php echo $val['id'];?>' onclick="coverAlbum(<?php echo $val['id'];?>)">
+                    <i class='icon-remove-sign' id="<?php echo $val['id'];?>" ></i>
+                    <?php if ($val['filename']== $getCover[$albumID]){ ?>
+                    <input type='checkbox' id="cover<?php echo $val['id'];?>" value='<?php echo $val['id'];?>' onclick="coverAlbum(<?php echo $val['id'];?>)" checked="checked">
+                     <?php }else{ ?>
+                    <input type='checkbox' id="cover<?php echo $val['id'];?>" value='<?php echo $val['id'];?>' onclick="coverAlbum(<?php echo $val['id'];?>)" >
+                   <?php  }?>
+
                 </li>
                 <?php  }?>
 

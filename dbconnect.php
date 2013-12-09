@@ -16,4 +16,5 @@ $dbName = "imagegallery_db";
 @mysql_connect($dbHost, $dbUser, $dbPass) or die("unable to
 connect to database.");
 mysql_select_db($dbName) or die ("Unable to select");
+
 ?>

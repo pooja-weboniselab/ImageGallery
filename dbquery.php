@@ -199,6 +199,8 @@ class dbQuery{
         return $albumGallery ;
 
     }
+
+
 }
 $dbObj = new dbQuery() ;
 
