@@ -42,8 +42,8 @@ $viewData = $dbObj->listImageMaster();
                 'swf'      : 'uploadify/uploadify.swf',
                 'uploader' : 'uploadstatus.php',
                 'onComplete': function(event, queueID, fileObj, response, data) {
-                    console.log(fileObj.filename);
-                    // $("#imagegallery").append(data);
+
+                    location.reload();
                 }
 
 

@@ -8,13 +8,22 @@
  */
 
 $dbHost = "localhost";
+$dbName = "imagegallery_db";
 $dbUser = "poojawebonise";
 $dbPass = "weboniselab";
-$dbName = "imagegallery_db";
 
-/* connecting databases */
+/*
+/* connecting databases
 @mysql_connect($dbHost, $dbUser, $dbPass) or die("unable to
 connect to database.");
 mysql_select_db($dbName) or die ("Unable to select");
+*/
+
+try {
+    $conn = new PDO('mysql:host=localhost;dbname=$dbName', $dbUser, $dbPass);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch(PDOException $e) {
+    echo 'ERROR: ' . $e->getMessage();
+}
 
 ?>
